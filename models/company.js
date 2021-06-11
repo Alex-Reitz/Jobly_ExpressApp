@@ -7,6 +7,25 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 /** Related functions for companies. */
 
 class Company {
+  /* Filtering */
+  static async searchFilter(searchName, minEmployees, maxEmployees) {
+    const results = await db.query(
+      `
+    SELECT handle, name
+    FROM companies
+    WHERE name LIKE $1
+    AND num_employees > $2
+    AND num_employees < $3
+    `,
+      [`%${searchName}%`, minEmployees, maxEmployees]
+    );
+    if (results.rows.length === 0) {
+      return "No results found.";
+    } else {
+      return results.rows;
+    }
+  }
+
   /** Create a company (from data), update db, return new company data.
    *
    * data should be { handle, name, description, numEmployees, logoUrl }
