@@ -50,7 +50,6 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   try {
-    console.log(req.res.locals.user);
     let companies;
     if (Object.keys(req.query).length === 0) {
       companies = await Company.findAll();

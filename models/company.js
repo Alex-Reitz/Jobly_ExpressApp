@@ -10,7 +10,7 @@ class Company {
   /* Filtering */
   static async searchFilter(searchName, minEmployees, maxEmployees) {
     const results = await db.query(
-      `
+      ` 
     SELECT handle, name
     FROM companies
     WHERE name LIKE $1
