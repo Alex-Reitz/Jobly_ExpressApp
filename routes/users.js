@@ -10,6 +10,7 @@ const {
   ensureAdmin,
   ensureAdminUserMatch,
 } = require("../middleware/auth");
+
 const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
@@ -17,6 +18,20 @@ const userNewSchema = require("../schemas/userNew.json");
 const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
+
+/* POST route to allow users to apply for jobs */
+
+router.post("/:username/jobs/:id", async function (req, res, next) {
+  try {
+    let username = req.params.username;
+    let job_id = req.params.id;
+    console.log(username, job_id);
+    const jobApplication = await User.jobApplications(username, job_id);
+    return res.status(201).json({ applied: jobApplication });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /** POST / { user }  => { user, token }
  *
@@ -71,7 +86,6 @@ router.get("/", ensureAdmin, async function (req, res, next) {
 
 router.get("/:username", ensureAdminUserMatch, async function (req, res, next) {
   try {
-    console.log(req.params.username);
     const user = await User.get(req.params.username);
     return res.json({ user });
   } catch (err) {

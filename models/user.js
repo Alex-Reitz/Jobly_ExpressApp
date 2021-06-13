@@ -14,6 +14,23 @@ const { BCRYPT_WORK_FACTOR } = require("../config.js");
 /** Related functions for users. */
 
 class User {
+  /* Allow users to apply for a job  
+  Should return JSON like {applied: jobId}
+  Auth=admin, or the user logged in
+  */
+  static async jobApplications(username, job_id) {
+    const result = await db.query(
+      `
+      INSERT INTO applications
+      (username,
+        job_id)
+       VALUES ($1, $2)
+       RETURNING username, job_id`,
+      [username, job_id]
+    );
+    return result.rows[0].job_id;
+  }
+
   /** authenticate user with username, password.
    *
    * Returns { username, first_name, last_name, email, is_admin }
@@ -97,7 +114,7 @@ class User {
    **/
 
   static async findAll() {
-    const result = await db.query(
+    const resultUsers = await db.query(
       `SELECT username,
                   first_name AS "firstName",
                   last_name AS "lastName",
@@ -106,8 +123,12 @@ class User {
            FROM users
            ORDER BY username`
     );
-
-    return result.rows;
+    const resultApplications = await db.query(`
+      SELECT * 
+      FROM applications
+      WHERE 
+    `);
+    return resultUsers.rows;
   }
 
   /** Given a username, return data about user.
