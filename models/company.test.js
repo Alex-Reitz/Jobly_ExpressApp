@@ -116,16 +116,23 @@ describe("findAll", function () {
       ],
     });
   });
-  test("works - with filtering", async function () {
-    let companies = await Company.searchFilter("Bau", 100, 200);
-    expect(companies).toEqual({
-      companies: [
-        {
-          handle: "bauer-gallagher",
-          name: "Bauer-Gallagher",
-        },
-      ],
+
+  test("works: specific query", async function () {
+    let companies = await Company.findAll({
+      name: "Bau",
+      minEmployees: 10,
+      maxEmployees: 10000,
     });
+    expect(companies).toEqual([
+      {
+        companies: [
+          {
+            handle: "bauer-gallagher",
+            name: "Bauer-Gallagher",
+          },
+        ],
+      },
+    ]);
   });
 });
 

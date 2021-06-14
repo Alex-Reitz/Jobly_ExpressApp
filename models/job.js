@@ -95,7 +95,7 @@ class Jobs {
     });
     const handleVarIdx = "$" + (values.length + 1);
 
-    const querySql = `UPDATE jobs 
+    const querySql = `UPDATE jobs  
                       SET ${setCols} 
                       WHERE handle = ${handleVarIdx} 
                       RETURNING id, 
