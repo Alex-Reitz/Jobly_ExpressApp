@@ -54,7 +54,7 @@ function ensureAdmin(req, res, next) {
   }
 }
 
-/* Checks that the current user is an admin and is accessing their own user information */
+/* Checks that the current user is an admin or that user is accessing their own user information */
 function ensureAdminUserMatch(req, res, next) {
   try {
     if (

@@ -113,7 +113,7 @@ class User {
    * Returns [{ username, first_name, last_name, email, is_admin }, ...]
    **/
 
-  static async findAll() {
+  static async findAll(username) {
     const resultUsers = await db.query(
       `SELECT username,
                   first_name AS "firstName",
@@ -123,12 +123,15 @@ class User {
            FROM users
            ORDER BY username`
     );
-    const resultApplications = await db.query(`
+    const resultApplications = await db.query(
+      `
       SELECT * 
       FROM applications
-      WHERE 
-    `);
-    return resultUsers.rows;
+      WHERE username = $1
+    `,
+      [username]
+    );
+    return resultUsers.rows, resultApplications;
   }
 
   /** Given a username, return data about user.

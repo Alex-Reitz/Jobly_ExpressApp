@@ -70,7 +70,8 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 
 router.get("/", ensureAdmin, async function (req, res, next) {
   try {
-    const users = await User.findAll();
+    const username = req.res.locals.user.username;
+    const users = await User.findAll(username);
     return res.json({ users });
   } catch (err) {
     return next(err);
